@@ -4,36 +4,29 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-typedef struct tui_label_t
-{
+typedef struct tui_label_t {
 	int x;
 	int y;
 	char *text;
-}
-tui_label_t;
+} tui_label_t;
 
-typedef struct tui_button_t
-{
-	int x;
-	int y;
-	char *text;
-	bool active;
-	void (*no_func)();	/* Executes when the button is active. */
-	void (*nc_func)();	/* Executes when the button is not active. */
-}
-tui_button_t;
-
-typedef struct tui_lamp_t
-{
+typedef struct tui_button_t {
 	int x;
 	int y;
 	char *text;
 	bool active;
-}
-tui_lamp_t;
+	void (*no_func)(); /* Executes when the button is active. */
+	void (*nc_func)(); /* Executes when the button is not active. */
+} tui_button_t;
 
-typedef struct tui_t
-{
+typedef struct tui_lamp_t {
+	int x;
+	int y;
+	char *text;
+	bool active;
+} tui_lamp_t;
+
+typedef struct tui_t {
 	bool running;
 	int selection_id;
 	int n_labels;
@@ -42,8 +35,7 @@ typedef struct tui_t
 	tui_label_t *labels;
 	tui_button_t *buttons;
 	tui_lamp_t *lamps;
-}
-tui_t;
+} tui_t;
 
 void init_tui(tui_t *tui);
 void exit_tui(void);
