@@ -61,36 +61,18 @@ FirmataExt firmataExt;
 #include <FirmataReporting.h>
 FirmataReporting reporting;
 
-void systemResetCallback()
-{
-// Does more harm than good on ESP32 (because may touch pins reserved
-// for memory IO and other reserved functions)
-#ifndef ESP32 
-	for (byte i = 0; i < TOTAL_PINS; i++) 
-	{
-		if (FIRMATA_IS_PIN_ANALOG(i)) 
-		{
-			Firmata.setPinMode(i, PIN_MODE_ANALOG);
-		} 
-		else if (IS_PIN_DIGITAL(i)) 
-		{
-			Firmata.setPinMode  (i, PIN_MODE_OUTPUT);
-		}
-	}
-#endif
+void systemResetCallback() {
 	firmataExt.reset();
 }
 
-void initTransport()
-{
+void initTransport() {
 	// Uncomment to save a couple of seconds by disabling the startup blink sequence.
 	// Firmata.disableBlinkVersion();
   
-	Firmata.begin(115200);
+	Firmata.begin(57600);
 }
 
-void initFirmata()
-{
+void initFirmata() {
 #ifdef ENABLE_DIGITAL
 	firmataExt.addFeature(digitalInput);
 	firmataExt.addFeature(digitalOutput);
@@ -117,8 +99,7 @@ void initFirmata()
 	Firmata.attach(SYSTEM_RESET, systemResetCallback);
 }
 
-void setup()
-{
+void setup() {
 	// Set firmware name and version.
 	// Do this before initTransport(), because some client libraries expect that a reset sends this automatically.
 	Firmata.setFirmwareNameAndVersion("ConfigurableFirmata", FIRMATA_FIRMWARE_MAJOR_VERSION, FIRMATA_FIRMWARE_MINOR_VERSION);
@@ -130,13 +111,10 @@ void setup()
   Firmata.sendString(F("Done"));
 }
 
-void loop()
-{
-	while(Firmata.available()) 
-	{
+void loop() {
+	while(Firmata.available())  {
 		Firmata.processInput();
-		if (!Firmata.isParsingMessage()) 
-		{
+		if (!Firmata.isParsingMessage())  {
 			break;
 		}
 	}
