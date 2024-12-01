@@ -56,26 +56,6 @@ void setQutput(driver_t *driver, uint8_t pin, bool state)
 	uint8_t ubytes[] = {state, pin, CMD_BYTE_SET_STATE};
 	firmata_bytes = format_firmata_bytes(3, ubytes);
 	fwrite(&firmata_bytes, 3, 1, driver->serial_dev);
-
-	/* Old, hardcoded stuff is below... Leave it here just in case. */
-	
-	#if 0	
-	
-	/* Set first byte: pin state... then shift to next byte. */
-	firmata_bytes += state;
-	firmata_bytes = firmata_bytes << 8;
-	
-	/* Set second byte: pin number... then shift to next byte. */
-	firmata_bytes += pin;
-	firmata_bytes = firmata_bytes << 8;
-	
-	/* Set third byte: command to set state. */
-	firmata_bytes += DRIVER_BYTE_SET_STATE;
-	
-	/* Send bytes to the serial device. */
-	fwrite(&firmata_bytes, 3, 1, driver->serial_dev);
-	
-	#endif
 }
 
 bool getInput(driver_t *driver, uint8_t pin)
@@ -128,24 +108,4 @@ void setPinMode(driver_t *driver, uint8_t pin, PIN_MODE_t pinMode)
 	uint8_t ubytes[] = {pinMode, pin, CMD_BYTE_SET_MODE};
 	firmata_bytes = format_firmata_bytes(3, ubytes);
 	fwrite(&firmata_bytes, 3, 1, driver->serial_dev);
-	
-	/* Old, hardcoded stuff is below... Leave it here just in case. */
-	
-	#if 0
-	
-	/* Set first byte: pin mode... then shift to next byte. */
-	firmata_bytes += pinMode;
-	firmata_bytes = firmata_bytes << 8;
-
-	/* Set second byte: pin number... then shift to next byte. */
-	firmata_bytes += pin;
-	firmata_bytes = firmata_bytes << 8;
-	
-	/* Set third byte: command to set mode. */
-	firmata_bytes += DRIVER_BYTE_SET_MODE;
-	
-	/* Send bytes to the serial device. */
-	fwrite(&firmata_bytes, 3, 1, driver->serial_dev);
-	
-	#endif
 }
