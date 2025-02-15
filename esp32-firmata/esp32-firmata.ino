@@ -16,7 +16,7 @@
 
 // #define ENABLE_I2C
 // #define ENABLE_SPI
-// #define ENABLE_ANALOG
+#define ENABLE_ANALOG
 #define ENABLE_DIGITAL
 // #define ENABLE_DHT
 // #define ENABLE_FREQUENCY
