@@ -43,7 +43,7 @@ import static org.firmata4j.firmata.parser.FirmataToken.*;
  *
  * @author Oleg Kurbatov &lt;o.v.kurbatov@gmail.com&gt;
  */
-public class CustomDevice implements org.firmata4j.IODevice {
+public class CustomDevice extends org.firmata4j.firmata.FirmataDevice {
 
     private Parser parser;
     private TransportInterface transport;
@@ -110,10 +110,11 @@ public class CustomDevice implements org.firmata4j.IODevice {
      * from the transport
      */
     public CustomDevice(TransportInterface transport, FiniteStateMachine protocol) {
-        parser = new FirmataParser(protocol);
-        transport.setParser(parser);
-        this.protocol = protocol;
-        this.transport = transport;
+        super(transport, protocol);
+        // parser = new FirmataParser(protocol);
+        // transport.setParser(parser);
+        // this.protocol = protocol;
+        // this.transport = transport;
     }
 
     @Override
@@ -350,7 +351,7 @@ public class CustomDevice implements org.firmata4j.IODevice {
         @Override
         public void accept(Event event) {
             byte pinId = (Byte) event.getBodyItem(PIN_ID);
-            FirmataPin pin = new FirmataPin(CustomDevice.super.this, pinId);
+            FirmataPin pin = new FirmataPin((FirmataDevice)CustomDevice.this, pinId);
             for (byte i : (byte[]) event.getBodyItem(PIN_SUPPORTED_MODES)) {
                 pin.addSupportedMode(Pin.Mode.resolve(i));
             }
@@ -496,7 +497,7 @@ public class CustomDevice implements org.firmata4j.IODevice {
         @Override
         public void accept(Event event) {
             String message = (String) event.getBodyItem(STRING_MESSAGE);
-            IOEvent evt = new IOEvent(FirmataDevice.this);
+            IOEvent evt = new IOEvent((FirmataDevice)CustomDevice.this);
             for (IODeviceEventListener listener : listeners) {
                 listener.onMessageReceive(evt, message);
             }

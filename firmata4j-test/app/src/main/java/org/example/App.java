@@ -21,25 +21,15 @@ public class App {
 	
     public String getGreeting() {
 		log = Logger.getLogger("FirmataTest");
-    	device = new FirmataDevice(new CustomTransport("127.0.0.1:8555"));
-    	// device = new FirmataDevice(new CustomTransport("/dev/ttyUSB1"));
-		// device = new FirmataDevice("/dev/ttyUSB0");
-		// SerialTransport ts = new SerialTransport("/dev/ttyUSB0");
-		try {
-			// ts.start();
-			// ts.write(hexStringToByteArray("f079f7"));
-			// ts.
-		}
-		catch(Exception e) {
-			log.log(Level.SEVERE, "Fail on custom stuff", e);
-		}
+		device = new FirmataDevice(new NetworkTransport("127.0.0.1:8555"));
+    	// device = new FirmataDevice(new CustomTransport("127.0.0.1:8555"));
 		// device = new FirmataDevice("/dev/ttyUSB0");
     	try {
 			log.info("device.start() starting");
     		device.start();
 			log.info("device.ensureInitializationIsDone() starting");
 	    	device.ensureInitializationIsDone();
-			log.info("Done???");
+			log.info("Initialized Firmata device??");
 			return "Success!";
 	    }
 	    catch(Exception e) {
