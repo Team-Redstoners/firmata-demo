@@ -29,9 +29,9 @@ public class App {
 	
     public String getGreeting() {
 		log = Logger.getLogger("FirmataTest");
-		// device = new FirmataDevice(new NetworkTransport("127.0.0.1:8555"));
+		device = new FirmataDevice(new NetworkTransport("127.0.0.1:8555"));
     	// device = new FirmataDevice(new CustomTransport("127.0.0.1:8555"));
-		device = new FirmataDevice("/dev/ttyUSB1");
+		// device = new FirmataDevice("/dev/ttyUSB1");
     	try {
 			log.info("device.start() starting");
     		device.start();
@@ -41,29 +41,33 @@ public class App {
 
 			testPin = device.getPin(2);
 			testPin.setMode(Mode.INPUT);
-			// log.info(HexFormat.of().formatHex(FirmataMessageFactory.setMode((byte)2, Mode.INPUT)));
-			device.sendMessage(hexStringToByteArray("f40200"));
 			device.addEventListener(new IODeviceEventListener() {
 				@Override
 				public void onStart(IOEvent ev) {
-					log.info("start");
+					log.info("Device listener started");
 				}
 				@Override
 				public void onStop(IOEvent ev) {
-
 				}
 				@Override
 				public void onMessageReceive(IOEvent ev, String msg) {
-
 				}
 				@Override
 				public void onPinChange(IOEvent ev) {
-					log.info("event: " + ev.toString());
+					log.info("pin  " + ev.getPin().getIndex() + " is now " + ev.getValue());
 				}
 			});
+
+			Pin outPin = device.getPin(0);
+			device.sendMessage(FirmataMessageFactory.setMode((byte)2, Mode.INPUT));
+			boolean on = false;
 			while(true) {
-				System.out.println("val: " + testPin.getValue());
-				Thread.sleep(500);
+				// System.out.println("val: " + testPin.getValue());
+				// testPin.setMode(Mode.INPUT);
+				
+				outPin.setValue(on ? 1 : 0);
+				on = !on;
+				Thread.sleep(2000);
 			}
 
 			// return "Success!";
